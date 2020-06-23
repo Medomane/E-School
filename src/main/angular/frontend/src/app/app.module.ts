@@ -12,6 +12,7 @@ import { StudentsComponent } from './students/students.component';
 import { AgGridModule } from 'ag-grid-angular';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ProfessorsComponent } from './professors/professors.component';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     AppComponent,
     LoginComponent,
     HomeComponent,
-    StudentsComponent
+    StudentsComponent,
+    ProfessorsComponent
   ],
   imports: [
     BrowserModule,

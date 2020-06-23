@@ -1,0 +1,132 @@
+<div class="container mt-3">
+  <div class="example-header">
+    <div style="width: 20%;display: inline-block;">
+      Nombre d'éléments:
+      <select (change)="onPageSizeChanged()" id="page-size">
+        <option value="15" selected="">15</option>
+        <option value="100">100</option>
+        <option value="500">500</option>
+        <option value="1000">1000</option>
+      </select>
+    </div>
+    <div style="width: 80%;display: inline-block;text-align: right;">
+      <button class="btn btn-outline-primary" (click)="open(content)">Ajouter</button>
+    </div>
+  </div>
+  <ag-grid-angular
+    style="width: 100%; height: 504px;"
+    class="ag-theme-balham"
+    [enableSorting]="true"
+    [enableFilter]="true"
+    [pagination]="true"
+    [paginationPageSize]="paginationPageSize"
+    [paginationNumberFormatter]="paginationNumberFormatter"
+    [rowData]="rowData"
+    (gridReady)="onGridReady($event)"
+    [columnDefs]="columnDefs">
+  </ag-grid-angular>
+  <ng-template #content let-modal >
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">{{isEditing?currentUser["lastName"]+' '+currentUser["firstName"]:"Ajouter un professeur"}}</h4>
+      <button type="button" class="close" aria-label="Close"(click)="modal.dismiss()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <input type="hidden" formControlName="id" class="form-control" />
+        <div class="alert alert-info" *ngIf="!this.service.isEditable(currentUser) && this.isEditing">Vous ne pouvez pas modifier les informations !!!</div>
+        <div class="alert alert-danger" *ngIf="message">{{message}}</div>
+        <div class="form-row">
+          <div class="form-group col-6">
+            <label>Nom *:</label>
+            <input type="text" formControlName="lastName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }" />
+            <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
+              <div *ngIf="f.lastName.errors.required">Le nom est obligatoire !!!</div>
+            </div>
+          </div>
+          <div class="form-group col-6">
+            <label>Prénom *:</label>
+            <input type="text" formControlName="firstName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }" />
+            <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
+              <div *ngIf="f.firstName.errors.required">Le prénom est obligatoire !!!</div>
+            </div>
+          </div>
+          <div class="form-group col-6">
+            <label>CIN *:</label>
+            <input type="text" formControlName="cin" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.cin.errors }" />
+            <div *ngIf="submitted && f.cin.errors" class="invalid-feedback">
+              <div *ngIf="f.cin.errors.required">Le cin est obligatoire !!!</div>
+            </div>
+          </div>
+          <div class="form-group col-6">
+            <label>Statut *:</label>
+            <input type="text" formControlName="status" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.status.errors }" />
+            <div *ngIf="submitted && f.status.errors" class="invalid-feedback">
+              <div *ngIf="f.status.errors.required">Le status est obligatoire !!!</div>
+            </div>
+          </div>
+          <div class="form-group col-6">
+            <label>Role *:</label>
+            <select formControlName="role" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.role.errors }">
+              <option value="admin">Administrateur</option>
+              <option value="user">Utilisateur</option>
+            </select>
+            <div *ngIf="submitted && f.role.errors" class="invalid-feedback">
+              <div *ngIf="f.role.errors.required">Le role est obligatoire !!!</div>
+            </div>
+          </div>
+          <div class="form-group col-6">
+            <label>Sexe *:</label>
+            <select formControlName="gender" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.gender.errors }">
+              <option value="male">Masculin</option>
+              <option value="female">Féminin</option>
+            </select>
+            <div *ngIf="submitted && f.gender.errors" class="invalid-feedback">
+              <div *ngIf="f.gender.errors.required">Le sexe est obligatoire !!!</div>
+            </div>
+          </div>
+          <div class="form-group col-6">
+            <label>APOGEE :</label>
+            <input type="text" formControlName="apogee" class="form-control" />
+          </div>
+          <div class="form-group col-6">
+            <label>Téléphone :</label>
+            <input type="text" formControlName="phone" class="form-control"/>
+          </div>
+          <div class="form-group col-6">
+            <label>Email *:</label>
+            <input type="email" formControlName="email" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
+            <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+              <div *ngIf="f.email.errors.required">L'email est obligatoire !!!</div>
+            </div>
+          </div>
+          <div class="form-group col-6">
+            <label>Mot de passe {{!isEditing?'*':''}}:</label>
+            <input type="password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
+            <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+              <div *ngIf="f.password.errors.required">Le mot de passe est obligatoire !!!</div>
+              <div *ngIf="f.password.errors.minlength">Au moins 6 caratères !!!</div>
+            </div>
+          </div>
+          <div class="form-group col">
+            <label>Confirmation du mot de passe {{!isEditing?'*':''}}:</label>
+            <input type="password" formControlName="confirmPassword" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.confirmPassword.errors }" />
+            <div *ngIf="submitted && f.confirmPassword.errors" class="invalid-feedback">
+              <div *ngIf="f.confirmPassword.errors.required">Vous devez confirmer le mot de passe !!!</div>
+              <div *ngIf="f.confirmPassword.errors.mustMatch">Les mots de passes ne sont pas les mêmes !!!</div>
+            </div>
+          </div>
+          <div class="form-group col-6">
+            <label>Informations :</label>
+            <textarea formControlName="information" class="form-control"></textarea>
+          </div>
+        </div>
+        <div class="text-right">
+          <button class="btn btn-primary mr-1" [disabled]="!this.service.isEditable(currentUser) && isEditing">{{isEditing?"Valider":"Ajouter"}}</button>
+          <button class="btn btn-secondary" type="reset" [disabled]="!this.service.isEditable(currentUser) && isEditing" (click)="onReset()">Annuler</button>
+        </div>
+      </form>
+    </div>
+  </ng-template>
+</div>

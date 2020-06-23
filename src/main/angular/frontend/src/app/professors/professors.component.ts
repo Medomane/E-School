@@ -1,21 +1,20 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {StudentsService} from './students.service';
-import {AgGridAngular} from 'ag-grid-angular';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AuthService} from '../auth.service';
 import {Router} from '@angular/router';
-import Swal from 'sweetalert2';
 import {AppComponent} from '../app.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MustMatch } from '../_helpers/must-match.validator';
-import {AuthService} from '../auth.service';
-
+import {MustMatch} from '../_helpers/must-match.validator';
+import Swal from 'sweetalert2';
+import {ProfessorsService} from './professors.service';
 
 @Component({
-  selector: 'app-students',
-  templateUrl: './students.component.html',
-  styleUrls: ['./students.component.scss']
+  selector: 'app-professors',
+  templateUrl: './professors.component.html',
+  styleUrls: ['./professors.component.css']
 })
-export class StudentsComponent implements OnInit {
+export class ProfessorsComponent implements OnInit {
+
   registerForm: FormGroup;
   @ViewChild('content') content: any;
   submitted = false;
@@ -28,13 +27,15 @@ export class StudentsComponent implements OnInit {
   private gridColumnApi;
   currentUser = {};
   message: string;
-  constructor(public service: StudentsService, public auth: AuthService, private router: Router, public app: AppComponent, private modalService: NgbModal, private formBuilder: FormBuilder) {
-    this.app.subTitle = 'Liste des étudiants';
+  // tslint:disable-next-line:max-line-length
+  constructor(public service: ProfessorsService, public auth: AuthService, private router: Router, public app: AppComponent, private modalService: NgbModal, private formBuilder: FormBuilder) {
+    this.app.subTitle = 'Liste des professeurs';
     this.columnDefs = [
       {field: 'lastName', displayName: 'Nom' },
       {field: 'firstName', displayName: 'Prénom' },
       {field: 'email', displayName: 'Email' },
       {field: 'cin', displayName: 'CIN' },
+      {field: 'status', displayName: 'Statut' },
       {displayName: 'Actions' , width: 100,
         cellRenderer: (data) => {
           const id = data.data._links.self.href.split('/')[data.data._links.self.href.split('/').length - 1];
@@ -87,7 +88,7 @@ export class StudentsComponent implements OnInit {
       id: [''],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      cin: ['', Validators.required],
+      status: ['', Validators.required],
       apogee: [''],
       gender: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -96,7 +97,7 @@ export class StudentsComponent implements OnInit {
       password: ['', passwordValidators],
       confirmPassword: [''],
       role: ['', Validators.required],
-      cne: ['', Validators.required]
+      cin: ['', Validators.required]
     }, {
       validator: MustMatch('password', 'confirmPassword')
     });
@@ -116,7 +117,7 @@ export class StudentsComponent implements OnInit {
       confirmButtonText: 'Oui!'
     }).then((result) => {
       if (result.value) {
-        this.service.deleteStudent(id).subscribe(v => {
+        this.service.deleteProfessor(id).subscribe(v => {
           this.refreshGV();
         }, error => { console.error(error) ; });
       }
@@ -147,10 +148,10 @@ export class StudentsComponent implements OnInit {
   onGridReady(params) {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
-    this.service.getStudents().subscribe(v => {
+    this.service.getProfessors().subscribe(v => {
       if (typeof v === 'string') {
         const value = JSON.parse(v);
-        this.rowData = value._embedded.students;
+        this.rowData = value._embedded.professors;
         this.gridApi.sizeColumnsToFit();
       }
     }, error => { console.error(error) ; });
@@ -162,7 +163,7 @@ export class StudentsComponent implements OnInit {
     this.setValidators();
     this.currentUser = {};
     // @ts-ignore
-    this.registerForm.controls.id.value = 0;
+    this.registerForm.controls.id['value'] = 0;
     this.modalService.open(content);
   }
 
@@ -170,11 +171,11 @@ export class StudentsComponent implements OnInit {
     this.message = null;
     this.submitted = true;
     if (this.registerForm.invalid) { return; }
-    this.service.saveStudent(this.registerForm.value, this.currentUser).subscribe(v1 => {
-      this.service.getStudents().subscribe(v => {
+    this.service.saveProfessor(this.registerForm.value, this.currentUser).subscribe(v1 => {
+      this.service.getProfessors().subscribe(v => {
         if (typeof v === 'string') {
           const value = JSON.parse(v);
-          this.rowData = value._embedded.students;
+          this.rowData = value._embedded.professors;
           this.gridApi.sizeColumnsToFit();
         }
         this.modalService.dismissAll();
@@ -188,10 +189,10 @@ export class StudentsComponent implements OnInit {
   }
 
   refreshGV(){
-    this.service.getStudents().subscribe(v => {
+    this.service.getProfessors().subscribe(v => {
       if (typeof v === 'string') {
         const value = JSON.parse(v);
-        this.rowData = value._embedded.students;
+        this.rowData = value._embedded.professors;
       }
     }, error => { console.error(error) ; });
   }
