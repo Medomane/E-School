@@ -1,6 +1,6 @@
 package backend.Model;
 
-import com.sun.istack.NotNull;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,12 +20,12 @@ public class Teach{
     private Long id ;
     @NotNull
     private Date startAt ;
+    @NotNull
+    private Date endAt ;
 
     @ManyToOne
-    @JoinColumn(name = "professorId")
     private Professor professor ;
 
     @ManyToOne
-    @JoinColumn(name = "subjectId")
-    private Subject subject ;
+    private ModuleElement moduleElement ;
 }

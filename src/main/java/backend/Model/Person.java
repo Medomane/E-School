@@ -1,13 +1,13 @@
 package backend.Model;
 
-import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
-import java.util.List;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Data
@@ -15,10 +15,10 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 
-
 @Inheritance(strategy= InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn( name="type", discriminatorType= DiscriminatorType.STRING)
 public abstract class Person {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id ;
@@ -28,11 +28,11 @@ public abstract class Person {
     private String lastName ;
     @NotNull
     private String cin ;
-    @NotNull
     private String apogee ;
     @NotNull
-    private Gender sex ;
+    private Gender gender ;
     @NotNull
+    @Column(unique=true)
     private String email ;
     private String phone ;
     private String information ;
@@ -41,13 +41,15 @@ public abstract class Person {
     @NotNull
     private Role role;
 
-    @OneToMany(mappedBy = "person")
-    private List<Reservation> reservations;
+    public void setPassword(String password){
+        if(password.split("$").length >= 3) this.password = password;
+        else this.password = new BCryptPasswordEncoder().encode(password);
+    }
 
-}
-enum Gender {
-    MALE, FEMALE
-}
-enum Role{
-    ADMIN,USER
+    enum Gender {
+        male, female
+    }
+    enum Role{
+        admin,user
+    }
 }

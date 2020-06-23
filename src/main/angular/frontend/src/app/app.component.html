@@ -2,36 +2,35 @@
   <nav id="sidebar" class="sidebar-wrapper">
     <div class="sidebar-content">
       <div class="sidebar-brand">
-        <a href="#">E-School</a>
+        <a routerLink="/home">E-School</a>
+        <img src="../assets/logo.png" width="50" alt="logo">
       </div>
       <div class="sidebar-header">
         <div class="user-pic">
-          <img class="img-responsive img-rounded" src="../assets/user.jpg" alt="User picture">
+          <img class="img-responsive img-rounded" src="../assets/{{auth.isAuthenticated()?auth.getCurrentUser().gender:'female'}}.jpg" alt="User picture">
         </div>
         <div class="user-info">
-          <span class="user-name">{{isAuthenticated()?getCurrentUser().firstName:''}}
-            <strong>{{isAuthenticated()?getCurrentUser().lastName:''}}</strong>
+          <span class="user-name">{{auth.isAuthenticated()?auth.getCurrentUser().firstName:''}}
+            <strong>{{auth.isAuthenticated()?auth.getCurrentUser().lastName:''}}</strong>
           </span>
-          <span class="user-role">{{(isAuthenticated()?(getCurrentUser().role==='ADMIN'?"Administrateur":"Utilisateur"):"Utilisateur")}}</span>
+          <span class="user-role">{{(auth.isAuthenticated()?(auth.isAdmin()?"Administrateur":"Utilisateur"):"Utilisateur")}}</span>
         </div>
       </div>
       <div class="sidebar-menu">
         <ul>
           <li class="header-menu">
-            <span>General</span>
+            <span>Générale</span>
           </li>
-          <li class="sidebar-dropdown">
-            <a href="#">
+          <li class="sidebar-dropdown" [ngClass]="animationState[0]=='in'?'active':''">
+            <a href="/" (click)="toggleShowDiv(0)">
               <i class="fa fa-tachometer-alt"></i>
-              <span>Dashboard</span>
-              <span class="badge badge-pill badge-warning">New</span>
+              <span>Tableaux de bord</span>
+              <!--<span class="badge badge-pill badge-warning">New</span>-->
             </a>
-            <div class="sidebar-submenu">
+            <div class="sidebar-submenu" [@slideInOut]="animationState[0]">
               <ul>
                 <li>
-                  <a href="#">Dashboard 1
-                    <span class="badge badge-pill badge-success">Pro</span>
-                  </a>
+                  <a href="#">Dashboard 1</a>
                 </li>
                 <li>
                   <a href="#">Dashboard 2</a>
@@ -42,24 +41,19 @@
               </ul>
             </div>
           </li>
-          <li class="sidebar-dropdown">
-            <a href="#">
-              <i class="fa fa-shopping-cart"></i>
-              <span>E-commerce</span>
-              <span class="badge badge-pill badge-danger">3</span>
+          <li class="sidebar-dropdown" [ngClass]="animationState[1]=='in'?'active':''" *ngIf="auth.isAuthenticated() && auth.isAdmin() ">
+            <a href="#" (click)="toggleShowDiv(1)">
+              <i class="fa fa-cogs"></i>
+              <span>Paramètres</span>
+              <!--<span class="badge badge-pill badge-danger">3</span>-->
             </a>
-            <div class="sidebar-submenu">
+            <div class="sidebar-submenu" [@slideInOut]="animationState[1]">
               <ul>
                 <li>
-                  <a href="#">Products
-
-                  </a>
+                  <a routerLink="/admin/professors">Professeurs</a>
                 </li>
                 <li>
-                  <a href="#">Orders</a>
-                </li>
-                <li>
-                  <a href="#">Credit cart</a>
+                  <a routerLink="/admin/students">Etudiants</a>
                 </li>
               </ul>
             </div>
@@ -131,16 +125,16 @@
             <span>Extra</span>
           </li>
           <li>
-            <a href="#">
+            <a href="#" onclick="return false;">
               <i class="fa fa-book"></i>
               <span>Documentation</span>
-              <span class="badge badge-pill badge-primary">Beta</span>
+              <!--<span class="badge badge-pill badge-primary">Beta</span>-->
             </a>
           </li>
           <li>
-            <a href="#">
+            <a href="#" onclick="return false;">
               <i class="fa fa-calendar"></i>
-              <span>Calendar</span>
+              <span>Calendrier</span>
             </a>
           </li>
           <li>
@@ -165,29 +159,26 @@
         <i class="fa fa-cog"></i>
         <span class="badge-sonar"></span>
       </a>
-      <a (click)="logout()" routerLink="login">
+      <a (click)="this.logout()" routerLink="login">
         <i class="fa fa-power-off"></i>
       </a>
     </div>
   </nav>
   <main class="page-content">
     <div class="container-fluid">
-      <nav *ngIf="!isAuthenticated()" class="navbar navbar-dark bg-dark">
-        <a class="navbar-brand" routerLink="/">
+      <nav *ngIf="!auth.isAuthenticated()" class="navbar navbar-dark bg-dark">
+        <a class="navbar-brand" routerLink="/login">
           <img src="../assets/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
           E-School
         </a>
-        <button class="btn btn-dark float-right" (click)="logout()" *ngIf="isAuthenticated()">Se déconnecter</button>
-        <button class="btn btn-dark float-right" routerLink="login" *ngIf="!isAuthenticated()">Connexion</button>
       </nav>
-      <nav *ngIf="isAuthenticated()" class="navbar navbar-dark bg-dark">
-        <div class="btn btn-dark" id="toggle-sidebar" (click)="isToggled=!isToggled"><i class="fas fa-bars"></i></div>
+      <nav *ngIf="auth.isAuthenticated()" class="navbar navbar-dark bg-dark">
+        <div class="btn btn-dark" (click)="isToggled=!isToggled"><i class="fas fa-bars"></i></div>
+        <h3 class="m-auto" style="color:white;">{{this.subTitle}}</h3>
       </nav>
-      <div class="container">
-        <router-outlet>
+      <router-outlet>
 
-        </router-outlet>
-      </div>
+      </router-outlet>
     </div>
   </main>
 </div>

@@ -1,19 +1,18 @@
 package backend.Model;
 
-import com.sun.istack.NotNull;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import java.util.List;
+import javax.validation.constraints.NotNull;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
+@Data
 @DiscriminatorValue("professor")
 public class Professor extends Person{
     @NotNull
     private String status;
-
-    @OneToMany(mappedBy="professor")
-    private List<Teach> teaches;
 }

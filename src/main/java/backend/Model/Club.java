@@ -1,14 +1,10 @@
 package backend.Model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import java.util.List;
 
 @Entity
@@ -19,5 +15,5 @@ import java.util.List;
 @DiscriminatorValue("club")
 public class Club extends Object {
     @OneToMany(mappedBy="club")
-    private List<Join> joins;
+    private List<Adhere> adheres;
 }

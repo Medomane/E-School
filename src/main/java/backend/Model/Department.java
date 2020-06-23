@@ -1,9 +1,6 @@
 package backend.Model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -19,6 +16,5 @@ public class Department extends Object{
     private List<Branch> branches;
 
     @ManyToOne
-    @JoinColumn(name = "establishmentId")
     private Establishment establishment ;
 }

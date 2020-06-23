@@ -1,9 +1,6 @@
 package backend.Model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -16,13 +13,8 @@ import java.util.List;
 @DiscriminatorValue("module")
 public class Module extends Object {
     @OneToMany(mappedBy="module")
-    private List<Subject> subjects;
+    private List<ModuleElement> moduleElements;
 
     @ManyToOne
-    @JoinColumn(name = "branchId")
     private Branch branch ;
-
-    @ManyToOne
-    @JoinColumn(name = "sessionId")
-    private Session session ;
 }

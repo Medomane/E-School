@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {AppComponent} from "../app.component";
-import {Router} from "@angular/router"
+import {AppComponent} from '../app.component';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -9,7 +9,9 @@ import {Router} from "@angular/router"
 })
 export class HomeComponent implements OnInit {
 
-  constructor(public app: AppComponent ,private router: Router) { }
+  constructor(public app: AppComponent , private router: Router) {
+    this.app.subTitle = '';
+  }
 
   ngOnInit(): void {
   }

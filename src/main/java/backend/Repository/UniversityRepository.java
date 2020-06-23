@@ -1,11 +1,10 @@
 package backend.Repository;
 
 import backend.Model.University;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
-@RepositoryRestResource
 @CrossOrigin("*")
-public interface UniversityRepository extends JpaRepository<University,Long> {
+@RepositoryRestResource
+public interface UniversityRepository extends ObjectBaseRepository<University> {
 }

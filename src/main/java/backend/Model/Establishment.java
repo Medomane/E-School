@@ -1,9 +1,6 @@
 package backend.Model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -19,9 +16,5 @@ public class Establishment extends Object{
     private List<Department> departments;
 
     @ManyToOne
-    @JoinColumn(name = "universityId")
     private University university ;
-
-    @OneToMany(mappedBy = "establishment")
-    private List<Classroom> classrooms;
 }
