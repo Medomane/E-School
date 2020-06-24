@@ -1,6 +1,10 @@
 package backend.Model;
 
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -15,5 +19,6 @@ import java.util.List;
 @DiscriminatorValue("university")
 public class University extends Object{
     @OneToMany(mappedBy="university")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<Establishment> establishments;
 }

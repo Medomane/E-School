@@ -172,6 +172,13 @@ export class ProfessorsComponent implements OnInit {
     this.submitted = true;
     if (this.registerForm.invalid) { return; }
     this.service.saveProfessor(this.registerForm.value, this.currentUser).subscribe(v1 => {
+      if (typeof v1 === "string") {
+        let tv1 = JSON.parse(v1);
+        if( tv1.id === this.auth.getCurrentUser().id) {
+          this.auth.logout();
+          this.router.navigate(['/login']).then(r => console.log('navigate ' + r));
+        }
+      }
       this.service.getProfessors().subscribe(v => {
         if (typeof v === 'string') {
           const value = JSON.parse(v);

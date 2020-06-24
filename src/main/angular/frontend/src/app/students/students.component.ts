@@ -24,6 +24,7 @@ export class StudentsComponent implements OnInit {
   paginationPageSize;
   columnDefs;
   rowData;
+  branches;
   private gridApi;
   private gridColumnApi;
   currentUser = {};
@@ -37,8 +38,6 @@ export class StudentsComponent implements OnInit {
       {field: 'cin', displayName: 'CIN' },
       {displayName: 'Actions' , width: 100,
         cellRenderer: (data) => {
-          const id = data.data._links.self.href.split('/')[data.data._links.self.href.split('/').length - 1];
-          data.data.id = id;
           const eDiv = document.createElement('div');
           eDiv.setAttribute('style', 'width:100%;text-align:center;');
 
@@ -54,7 +53,7 @@ export class StudentsComponent implements OnInit {
                   </div>`;
             const deleteBtn = eDiv.querySelectorAll('.btn-danger')[0];
             deleteBtn.addEventListener('click', function(evt) {
-              currentComponent.onDeletePerson(id);
+              currentComponent.onDeletePerson(data.data.id);
             });
           }
           const editBtn = eDiv.querySelectorAll('.btn-info')[0];
@@ -96,7 +95,8 @@ export class StudentsComponent implements OnInit {
       password: ['', passwordValidators],
       confirmPassword: [''],
       role: ['', Validators.required],
-      cne: ['', Validators.required]
+      cne: ['', Validators.required],
+      branch: ['', Validators.required]
     }, {
       validator: MustMatch('password', 'confirmPassword')
     });
@@ -124,19 +124,27 @@ export class StudentsComponent implements OnInit {
   }
 
   onEditPerson(data){
-    this.submitted = false;
-    this.isEditing = true;
-    this.setValidators();
-    const keys = Object.keys(this.registerForm.controls);
-    const c = this;
-    keys.forEach(function(e, i){
-      // @ts-ignore
-      if (e !== 'password' && e !== 'confirmPassword') { c.registerForm.controls[e].value = data[e]; }
-    });
-    if (!this.service.isEditable(data) && this.isEditing) { this.registerForm.disable(); }
-    else { this.registerForm.enable(); }
-    this.currentUser = data;
-    this.modalService.open(this.content);
+    this.service.getBranch(data._links.branch.href).subscribe(v=>{
+      if (typeof v === 'string') {
+        const value = JSON.parse(v);
+        const branchId = value._links.self.href.split('/')[value._links.self.href.split('/').length - 1];
+        this.submitted = false;
+        this.isEditing = true;
+        this.setValidators();
+        const keys = Object.keys(this.registerForm.controls);
+        const c = this;
+        keys.forEach(function(e, i){
+          // @ts-ignore
+          if(e === 'branch') c.registerForm.controls[e].value = branchId;
+          // @ts-ignore
+          else if (e !== 'password' && e !== 'confirmPassword') { c.registerForm.controls[e].value = data[e]; }
+        });
+        if (!this.service.isEditable(data) && this.isEditing) { this.registerForm.disable(); }
+        else { this.registerForm.enable(); }
+        this.currentUser = data;
+        this.modalService.open(this.content);
+      }
+    }, error => { console.error(error) ;});
   }
 
   onPageSizeChanged() {
@@ -152,6 +160,17 @@ export class StudentsComponent implements OnInit {
         const value = JSON.parse(v);
         this.rowData = value._embedded.students;
         this.gridApi.sizeColumnsToFit();
+        this.service.getBranches().subscribe(vb => {
+          if(typeof vb === 'string'){
+            const tmp = JSON.parse(vb);
+            let otmp = tmp._embedded.branches;
+            // tslint:disable-next-line:only-arrow-functions
+            otmp.forEach(function(e){
+              e.id = e._links.self.href.split('/')[e._links.self.href.split('/').length - 1];
+            });
+            this.branches = otmp;
+          }
+        }, error => { console.error(error) ; });
       }
     }, error => { console.error(error) ; });
   }
@@ -171,6 +190,13 @@ export class StudentsComponent implements OnInit {
     this.submitted = true;
     if (this.registerForm.invalid) { return; }
     this.service.saveStudent(this.registerForm.value, this.currentUser).subscribe(v1 => {
+      if (typeof v1 === "string") {
+        let tv1 = JSON.parse(v1);
+        if(tv1.id === this.auth.getCurrentUser().id) {
+          this.auth.logout();
+          this.router.navigate(['/login']).then(r => console.log('navigate ' + r));
+        }
+      }
       this.service.getStudents().subscribe(v => {
         if (typeof v === 'string') {
           const value = JSON.parse(v);

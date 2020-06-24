@@ -1,0 +1,48 @@
+<div class="card-deck m-2" *ngIf="this.clubs && this.clubs.length > 0">
+  <div class="card" *ngFor="let c of this.clubs">
+    <div style="height:200px;width:100%;text-align: center;margin: auto;">
+      <img class="card-img-top" style="width: 100%;height: 100%;" [src]="this.app.path+'icon/'+c['id']" alt="Card image cap">
+    </div>
+    <div class="card-body">
+      <h5 class="card-title">{{c.name}}</h5>
+      <p class="card-text">{{c.information.substring(0,149)+(c.information.length>150?'...':'')}}</p>
+    </div>
+    <div class="card-footer">
+      <small class="text-muted">{{c.adheres.length}} membre{{c.adheres.length>1?'s':''}}</small>
+      <div class="btn btn-outline-info float-right" title="Information" (click)="open(content,c)"><i class="fas fa-info"></i></div>
+    </div>
+  </div>
+</div>
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title"><a [href]="currentClub.link" target="_blank" title="lien">{{this.currentClub.name}}</a></h4>
+    <button type="button" class="close" aria-label="Close"(click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <p class="col-12">
+        {{this.currentClub.information}}
+      </p>
+      <div style="width: 100%;" class="col-12" *ngIf="!this.service.isMember(this.currentClub)">
+        <button type="button" style="width: 100%;" class="btn btn-outline-primary" (click)="adhere()">S'Adhérer</button>
+      </div>
+      <div style="width: 100%;" class="col-12" *ngIf="this.service.isMember(this.currentClub)">
+        <button type="button" style="width: 100%;" class="btn btn-outline-danger" (click)="quite()">Sortir</button>
+      </div>
+    </div>
+    <ul class="list-group">
+      <li *ngFor="let a of currentClub.adheres" class="list-group-item" [ngClass]="a.student.id === this.auth.getCurrentUser().id?' list-group-item-dark':''">
+        <h5>{{a.student.firstName+' '+a.student.lastName}}</h5>
+        <ul>
+          <li><i class="badge badge-primary">{{a.role}}</i></li>
+          <li>{{a.student.branch.name.split('-')[0]+' '+(a.student.branch.name.split('-').length>2?a.student.branch.name.split('-')[1]:'')}}</li>
+          <li>Département : {{a.student.branch.department.name}}</li>
+          <li>{{a.student.branch.department.establishment.name}}</li>
+          <li>{{a.student.branch.department.establishment.university.name}}</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</ng-template>

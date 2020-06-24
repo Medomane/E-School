@@ -1,0 +1,75 @@
+<div class="container mt-3">
+  <div class="example-header">
+    <div style="width: 20%;display: inline-block;">
+      Nombre d'éléments:
+      <select (change)="onPageSizeChanged()" id="page-size">
+        <option value="15" selected="">15</option>
+        <option value="100">100</option>
+        <option value="500">500</option>
+        <option value="1000">1000</option>
+      </select>
+    </div>
+    <div style="width: 80%;display: inline-block;text-align: right;">
+      <button class="btn btn-outline-primary" (click)="open(content)">Ajouter</button>
+    </div>
+  </div>
+  <ag-grid-angular
+    style="width: 100%; height: 504px;"
+    class="ag-theme-balham"
+    [enableSorting]="true"
+    [enableFilter]="true"
+    [pagination]="true"
+    [paginationPageSize]="paginationPageSize"
+    [paginationNumberFormatter]="paginationNumberFormatter"
+    [rowData]="rowData"
+    (gridReady)="onGridReady($event)"
+    [columnDefs]="columnDefs">
+  </ag-grid-angular>
+  <ng-template #content let-modal >
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">{{isEditing?currentClub["name"]:"Ajouter un club"}}</h4>
+      <button type="button" class="close" aria-label="Close"(click)="modal.dismiss()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <input type="hidden" formControlName="id" class="form-control" />
+        <div class="alert alert-info" *ngIf="!this.service.isEditable(currentClub) && this.isEditing">Vous ne pouvez pas modifier les informations !!!</div>
+        <div class="alert alert-danger" *ngIf="message">{{message}}</div>
+        <div class="form-row">
+          <div class="form-group col-12 text-center">
+            <img *ngIf="!currentClub['adheres']" src="assets/logo.png" height="200" alt="logo">
+            <img *ngIf="currentClub['adheres']" [src]="this.app.path+'icon/'+currentClub['id']?this.app.path+'icon/'+currentClub['id']:'assets/logo.png'" height="200" alt="logo">
+          </div>
+          <div class="form-group col-6">
+            <label>Nom *:</label>
+            <input type="text" formControlName="name" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
+            <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+              <div *ngIf="f.name.errors.required">Le nom est obligatoire !!!</div>
+            </div>
+          </div>
+          <div class="form-group col-6">
+            <label>Lien :</label>
+            <input type="text" formControlName="link" class="form-control" />
+          </div>
+          <div class="form-group col-12">
+            <label>Icone *:</label>
+            <div class="custom-file">
+              <input type="file" formControlName="icon" accept="image/jpeg" class="custom-file-input" id="validatedCustomFile" (change)="onFileChanged($event)">
+              <label class="custom-file-label" for="validatedCustomFile">Choisissez une icone...</label>
+            </div>
+          </div>
+          <div class="form-group col-12">
+            <label>Informations :</label>
+            <textarea formControlName="information" class="form-control"></textarea>
+          </div>
+        </div>
+        <div class="text-right">
+          <button class="btn btn-primary mr-1" [disabled]="!this.service.isEditable(currentClub) && isEditing">{{isEditing?"Valider":"Ajouter"}}</button>
+          <button class="btn btn-secondary" type="reset" [disabled]="!this.service.isEditable(currentClub) && isEditing" (click)="onReset()">Annuler</button>
+        </div>
+      </form>
+    </div>
+  </ng-template>
+</div>

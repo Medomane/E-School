@@ -42,14 +42,14 @@ public abstract class Person {
     private Role role;
 
     public void setPassword(String password){
-        if(password.split("$").length >= 3) this.password = password;
+        if(password.contains("$")) this.password = password;
         else this.password = new BCryptPasswordEncoder().encode(password);
     }
 
-    enum Gender {
+    public static enum Gender {
         male, female
     }
-    enum Role{
+    public static enum Role{
         admin,user
     }
 }

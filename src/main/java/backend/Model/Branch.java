@@ -1,5 +1,6 @@
 package backend.Model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.persistence.DiscriminatorValue;
@@ -16,9 +17,11 @@ import java.util.List;
 @DiscriminatorValue("branch")
 public class Branch extends Object {
     @OneToMany(mappedBy="branch")
-    private List<Module> modules;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private List<Semester> semesters;
 
     @OneToMany(mappedBy="branch")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<Student> students;
 
     @ManyToOne

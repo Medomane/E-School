@@ -30,18 +30,18 @@
             <div class="sidebar-submenu" [@slideInOut]="animationState[0]">
               <ul>
                 <li>
-                  <a href="#">Dashboard 1</a>
+                  <a href="#">Dashboard</a>
                 </li>
                 <li>
-                  <a href="#">Dashboard 2</a>
+                  <a routerLink="/structure">Structure</a>
                 </li>
                 <li>
-                  <a href="#">Dashboard 3</a>
+                  <a routerLink="/clubs">Clubs</a>
                 </li>
               </ul>
             </div>
           </li>
-          <li class="sidebar-dropdown" [ngClass]="animationState[1]=='in'?'active':''" *ngIf="auth.isAuthenticated() && auth.isAdmin() ">
+          <li class="sidebar-dropdown" [ngClass]="animationState[1]=='in'?'active':''">
             <a href="#" (click)="toggleShowDiv(1)">
               <i class="fa fa-cogs"></i>
               <span>Paramètres</span>
@@ -50,10 +50,13 @@
             <div class="sidebar-submenu" [@slideInOut]="animationState[1]">
               <ul>
                 <li>
-                  <a routerLink="/admin/professors">Professeurs</a>
+                  <a routerLink="/admin/professors" *ngIf="auth.isAuthenticated() && auth.isAdmin() ">Professeurs</a>
                 </li>
                 <li>
-                  <a routerLink="/admin/students">Etudiants</a>
+                  <a routerLink="/admin/students" *ngIf="auth.isAuthenticated() && auth.isAdmin() ">Etudiants</a>
+                </li>
+                <li>
+                  <a routerLink="/admin/clubs">Clubs</a>
                 </li>
               </ul>
             </div>

@@ -5,5 +5,5 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 @CrossOrigin("*")
 @RepositoryRestResource
-public interface Department extends ObjectBaseRepository<backend.Model.Department> {
+public interface DepartmentRepository extends ObjectBaseRepository<backend.Model.Department> {
 }
