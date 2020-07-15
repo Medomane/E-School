@@ -61,6 +61,47 @@
               </ul>
             </div>
           </li>
+          <li class="sidebar-dropdown" [ngClass]="animationState[2]=='in'?'active':''">
+            <a href="#" (click)="toggleShowDiv(2)">
+              <i class="far fa-calendar-alt"></i>
+              <span>Résérvation</span>
+            </a>
+            <div class="sidebar-submenu" [@slideInOut]="animationState[2]">
+              <ul>
+                <li>
+                  <a routerLink="/classroom">Salles</a>
+                </li>
+                <li>
+                  <a routerLink="/classroomTP">Salles TP</a>
+                </li>
+                <li>
+                  <a routerLink="/amphi">Emphi</a>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li class="sidebar-dropdown" [ngClass]="animationState[3]=='in'?'active':''">
+            <a href="#" (click)="toggleShowDiv(3)">
+              <i class="fas fa-file-contract"></i>
+              <span>Demandes</span>
+            </a>
+            <div class="sidebar-submenu" [@slideInOut]="animationState[3]">
+              <ul>
+                <li>
+                  <a routerLink="/attestation">Attestation de scolarité</a>
+                </li>
+                <li>
+                  <a routerLink="/relevé">Relevé de notes</a>
+                </li>
+              </ul>
+            </div>
+          </li>
+
+
+
+
+
+          <!--
           <li class="sidebar-dropdown">
             <a href="#">
               <i class="far fa-gem"></i>
@@ -124,6 +165,7 @@
               </ul>
             </div>
           </li>
+          -->
           <li class="header-menu">
             <span>Extra</span>
           </li>
@@ -143,7 +185,7 @@
           <li>
             <a href="#">
               <i class="fa fa-folder"></i>
-              <span>Examples</span>
+              <span>Exemples</span>
             </a>
           </li>
         </ul>
