@@ -1,6 +1,9 @@
 package backend.Controller;
 
+import backend.Model.Object;
+import backend.Repository.ObjectRepository;
 import backend.Repository.UniversityRepository;
+import backend.func;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,13 +19,14 @@ import java.nio.file.Paths;
 @CrossOrigin("*")
 public class UniversityController {
     final UniversityRepository universityRepository;
+    final ObjectRepository objectRepository;
 
-    public UniversityController(UniversityRepository universityRepository) {
+    public UniversityController(UniversityRepository universityRepository,ObjectRepository objectRepository) {
         this.universityRepository = universityRepository;
+        this.objectRepository = objectRepository;
     }
-
-    @GetMapping(value = "/universityIcon/{id}",produces = MediaType.IMAGE_JPEG_VALUE)
-    public byte[] image(@PathVariable Long id) throws Exception {
-        return Files.readAllBytes(Paths.get(new File(System.getProperty("user.home")+"/e-school/images/universities/"+universityRepository.getOne(id).getIcon()).toURI()));
+    @GetMapping(value = "/obj/{id}")
+    public Object get(@PathVariable Long id) throws Exception {
+        return  objectRepository.findById(id).get();
     }
 }

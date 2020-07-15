@@ -40,7 +40,7 @@
         <div class="form-row">
           <div class="form-group col-12 text-center">
             <img *ngIf="!currentClub['adheres']" src="assets/logo.png" height="200" alt="logo">
-            <img *ngIf="currentClub['adheres']" [src]="this.app.path+'icon/'+currentClub['id']?this.app.path+'icon/'+currentClub['id']:'assets/logo.png'" height="200" alt="logo">
+            <img *ngIf="currentClub['adheres']" [src]="this.app.service.path+'image/'+currentClub['id']?this.app.service.path+'image/'+currentClub['id']:'assets/logo.png'" height="200" alt="logo">
           </div>
           <div class="form-group col-6">
             <label>Nom *:</label>

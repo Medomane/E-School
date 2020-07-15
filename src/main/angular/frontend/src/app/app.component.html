@@ -30,7 +30,7 @@
             <div class="sidebar-submenu" [@slideInOut]="animationState[0]">
               <ul>
                 <li>
-                  <a href="#">Dashboard</a>
+                  <a routerLink="/dashboard">Dashboard</a>
                 </li>
                 <li>
                   <a routerLink="/structure">Structure</a>
@@ -56,7 +56,7 @@
                   <a routerLink="/admin/students" *ngIf="auth.isAuthenticated() && auth.isAdmin() ">Etudiants</a>
                 </li>
                 <li>
-                  <a routerLink="/admin/clubs">Clubs</a>
+                  <a routerLink="/admin/clubs" *ngIf="auth.isAuthenticated() && auth.isAdmin() ">Clubs</a>
                 </li>
               </ul>
             </div>
@@ -178,6 +178,11 @@
       <nav *ngIf="auth.isAuthenticated()" class="navbar navbar-dark bg-dark">
         <div class="btn btn-dark" (click)="isToggled=!isToggled"><i class="fas fa-bars"></i></div>
         <h3 class="m-auto" style="color:white;">{{this.subTitle}}</h3>
+      </nav>
+      <nav aria-label="breadcrumb" *ngIf="crumb && crumb.length > 0">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item" *ngFor="let c of crumb"><a routerLink="{{c.link}}">{{c.name}}</a></li>
+        </ol>
       </nav>
       <router-outlet>
 

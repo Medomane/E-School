@@ -16,7 +16,7 @@ export class AuthService {
     return localStorage.getItem('user') != null;
   }
   isAdmin(){
-    return this.getCurrentUser().role === 'admin';
+    return this.isAuthenticated() && this.getCurrentUser().role === 'admin';
   }
   isPermitted(){
     if(location.pathname.startsWith('/admin/')) return this.isAuthenticated() && this.isAdmin();

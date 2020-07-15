@@ -1,0 +1,15 @@
+<div class="row m-3" *ngIf="departments && departments.length > 0">
+  <div class="column m-1" *ngFor="let e of this.departments">
+    <div class="card">
+      <div style="height:200px;width:100%;text-align: center;margin: auto;">
+        <img class="card-img-top" style="width: 100%;height: 100%;" [src]="this.app.service.path+'image/'+e._links.self.href.split('/')[e._links.self.href.split('/').length - 1]" alt="Card image cap">
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">{{e.name}}</h5>
+      </div>
+      <div class="card-footer">
+        <a routerLink="{{'/branches/'+e._links.self.href.split('/')[e._links.self.href.split('/').length - 1]}}" class="btn btn-outline-info float-right" title="Information">Branches</a>
+      </div>
+    </div>
+  </div>
+</div>

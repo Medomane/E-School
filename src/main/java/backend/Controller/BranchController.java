@@ -2,10 +2,9 @@ package backend.Controller;
 
 import backend.Model.Branch;
 import backend.Repository.BranchRepository;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @CrossOrigin("*")
@@ -18,5 +17,9 @@ public class BranchController {
     @PostMapping("/branch")
     public Branch save(@RequestBody Branch branch){
         return branchRepository.save(branch);
+    }
+    @GetMapping("/getBranches")
+    public List<Branch> get(){
+        return branchRepository.findAll();
     }
 }

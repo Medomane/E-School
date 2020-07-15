@@ -1,0 +1,59 @@
+<div class="row m-3" *ngIf="branches && branches.length > 0">
+  <div class="column m-1" *ngFor="let e of this.branches">
+    <div class="card">
+      <div style="height:200px;width:100%;text-align: center;margin: auto;">
+        <img class="card-img-top" style="width: 100%;height: 100%;" [src]="this.app.service.path+'image/'+e._links.self.href.split('/')[e._links.self.href.split('/').length - 1]" alt="Card image cap">
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">{{e.name}}</h5>
+
+        <div style="text-align: center;" *ngIf="currentBranch && currentBranch.semesters && currentBranch.semesters.length > 0 && currentBranch.name === e.name">
+          <div class="btn-group m-auto" role="group" aria-label="First group">
+            <button *ngFor="let s of currentBranch.semesters" type="button" (click)="showModules(sem,s)" class="btn btn-outline-success">{{s.name}}</button>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div (click)="showSemesters(e)" class="btn btn-outline-dark float-right" [ngClass]="currentBranch && currentBranch.semesters && currentBranch.semesters.length > 0 && currentBranch.name === e.name?'active':''" title="Semesters">Semesters</div>
+        <div (click)="open(content,e)" class="btn btn-outline-info float-right" title="Etudiants de l'années courante">Etudiants</div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h6 class="modal-title" id="modal-basic-title">{{this.currentBranch.name}}</h6>
+    <button type="button" class="close" aria-label="Close"(click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <p class="col-12">
+        {{this.currentBranch.information}}
+      </p>
+    </div>
+    <h5>Etudiants :</h5>
+    <ul class="list-group" *ngIf="currentBranch.students">
+      <li *ngFor="let s of currentBranch.students" class="list-group-item" [ngClass]="s._links.self.href.split('/')[s._links.self.href.split('/').length - 1] == this.app.auth.getCurrentUser().id?' list-group-item-dark':''">
+        <h5 class="d-inline-block">{{s.firstName+' '+s.lastName}}</h5>&nbsp;&nbsp;&nbsp;<i class="badge badge-primary">{{s.role=='admin'?'Administrateur':'Utilisateur'}}</i>
+      </li>
+    </ul>
+    <p class="alert alert-danger" *ngIf="!currentBranch.students || currentBranch.students.length <= 0">Pas d'étudiants</p>
+  </div>
+</ng-template>
+
+<ng-template #sem let-modal>
+  <div class="modal-header">
+    <h6 class="modal-title">{{this.currentSem.name}}</h6>
+    <button type="button" class="close" aria-label="Close"(click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="list-group" *ngIf="currentSem.modules">
+      <button *ngFor="let m of currentSem.modules" (click)="goToElement(m)" type="button" class="list-group-item list-group-item-action">{{m.name}}</button>
+    </div>
+    <p class="alert alert-danger" *ngIf="!currentSem.modules || currentSem.modules.length <= 0">Pas de modules</p>
+  </div>
+</ng-template>

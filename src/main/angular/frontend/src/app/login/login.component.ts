@@ -19,7 +19,7 @@ export class LoginComponent {
       return;
     }
     const headers = new HttpHeaders({ Authorization: 'Basic ' + btoa(credentials.email + ':' + credentials.password) });
-    this.http.get(this.app.path + 'person/login', {headers, responseType: 'text' as 'json'}).
+    this.http.get(this.app.service.path + 'person/login', {headers, responseType: 'text' as 'json'}).
     subscribe(value => {
       if (value){
         if (typeof value === 'string') {

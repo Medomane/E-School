@@ -38,6 +38,7 @@ public class MediaController {
     @GetMapping(value = "/image/{id}",produces = MediaType.IMAGE_JPEG_VALUE)
     public byte[] image(@PathVariable Long id) throws Exception {
         Object obj = objectRepository.findById(id).get();
+        System.out.println(obj.getClass().getSimpleName());
         return Files.readAllBytes(Paths.get(new File(func.imagesPath+"/"+obj.getClass().getSimpleName()+"/"+obj.getIcon()).toURI()));
     }
 }

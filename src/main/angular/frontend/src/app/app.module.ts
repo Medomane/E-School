@@ -15,6 +15,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ProfessorsComponent } from './professors/professors.component';
 import { ClubsComponent } from './clubs/clubs.component';
 import { ClubsViewComponent } from './clubs-view/clubs-view.component';
+import { EstablishmentComponent } from './establishment/establishment.component';
+import { DepartmentComponent } from './department/department.component';
+import { BranchComponent } from './branch/branch.component';
+import { ElementComponent } from './element/element.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 
 @NgModule({
@@ -25,7 +30,12 @@ import { ClubsViewComponent } from './clubs-view/clubs-view.component';
     StudentsComponent,
     ProfessorsComponent,
     ClubsComponent,
-    ClubsViewComponent
+    ClubsViewComponent,
+    EstablishmentComponent,
+    DepartmentComponent,
+    BranchComponent,
+    ElementComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,

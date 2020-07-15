@@ -25,6 +25,7 @@
     "ag-grid-angular": "^23.2.1",
     "ag-grid-community": "^23.2.1",
     "bootstrap": "^4.5.0",
+    "canvasjs": "^1.8.3",
     "jquery": "^3.5.1",
     "popper.js": "^1.16.1",
     "rxjs": "~6.5.4",

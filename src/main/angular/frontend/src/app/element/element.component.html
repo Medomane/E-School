@@ -1,0 +1,71 @@
+<div class="row m-3" *ngIf="elements && elements.length > 0">
+  <div class="column m-1" *ngFor="let e of this.elements">
+    <div class="card">
+      <div style="height:300px;width:100%;text-align: center;margin: auto;">
+        <img class="card-img-top" style="width: 100%;height: 100%;" src="/assets/logo.png" alt="Card image cap">
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">{{e.name}}</h5>
+      </div>
+      <div class="card-footer">
+        <div class="btn btn-outline-info float-right" title="Information" (click)="open(content,e)"><i class="fas fa-cogs"></i></div>
+        <div class="btn btn-outline-success float-right" title="Professeurs" (click)="getTeaches(teachers,e)"><i class="fas fa-users"></i></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #content let-modal >
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{currentElement.name}}</h4>
+    <button type="button" class="close" aria-label="Close"(click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <input type="hidden" formControlName="id" class="form-control" />
+      <div class="alert alert-info" *ngIf="!this.service.auth.isAdmin()">Vous ne pouvez pas modifier les informations !!!</div>
+      <div class="alert alert-danger" *ngIf="message">{{message}}</div>
+      <div class="form-row">
+        <div class="form-group col-6">
+          <label>Durée *:</label>
+          <input type="number" formControlName="duration" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.duration.errors }" />
+          <div *ngIf="submitted && f.duration.errors" class="invalid-feedback">
+            <div *ngIf="f.duration.errors.required">La durée est obligatoire !!!</div>
+          </div>
+        </div>
+        <div class="form-group col-6">
+          <label>Pourcentage *:</label>
+          <input type="number" formControlName="percent" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.percent.errors }" />
+          <div *ngIf="submitted && f.percent.errors" class="invalid-feedback">
+            <div *ngIf="f.percent.errors.required">Le pourcentage est obligatoire !!!</div>
+          </div>
+        </div>
+      </div>
+      <div class="text-right">
+        <button class="btn btn-primary mr-1" [disabled]="!this.service.auth.isAdmin()">Valider</button>
+        <button class="btn btn-secondary" type="reset" [disabled]="!this.service.auth.isAdmin()" (click)="onReset()">Vider</button>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #teachers let-modal >
+  <div class="modal-header">
+    <h4 class="modal-title">Professeurs</h4>
+    <button type="button" class="close" aria-label="Close"(click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="list-group" *ngIf="teaches && teaches.length > 0">
+      <button *ngFor="let m of teaches" type="button" class="list-group-item list-group-item-action">
+        <div class="text-success">{{m.professor.lastName+" "+m.professor.firstName}}</div>
+        <div> Commencement : {{m.startAt | date}}</div>
+        <div> Fin : {{m.endAt | date}}</div>
+      </button>
+    </div>
+    <p class="alert alert-danger" *ngIf="!teaches || teaches.length <= 0">Pas de professeurs</p>
+  </div>
+</ng-template>

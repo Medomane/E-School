@@ -124,8 +124,7 @@ export class ClubsComponent implements OnInit {
     this.gridColumnApi = params.columnApi;
     this.service.getClubs().subscribe(v => {
       if (typeof v === 'string') {
-        const value = JSON.parse(v);
-        this.rowData = value;
+        this.rowData = JSON.parse(v);
         this.gridApi.sizeColumnsToFit();
       }
     }, error => { console.error(error) ; });

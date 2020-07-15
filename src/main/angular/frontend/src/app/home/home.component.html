@@ -1,9 +1,9 @@
 <div class="card m-4" *ngIf="university">
-  <img class="card-img-top" [src]="app.path+'image/'+university.id" alt="Card image cap">
+  <img class="card-img-top" [src]="app.service.path+'image/'+university.id" alt="Card image cap">
   <div class="card-body">
     <h5 class="card-title">{{university.name}}</h5>
     <p class="card-text">{{university.information}}</p>
     <p class="card-text"><small class="text-muted"><a href="{{university.link}}" target="_blank" title="site">Site web</a></small></p>
-    <div class="btn btn-outline-info float-right">Etablissements ...</div>
+    <a routerLink="{{'/establishments/'+university.id}}" class="btn btn-outline-info float-right" >Etablissements ...</a>
   </div>
 </div>

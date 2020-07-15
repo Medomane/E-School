@@ -2,10 +2,9 @@ package backend.Controller;
 
 import backend.Model.Student;
 import backend.Repository.StudentRepository;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @CrossOrigin("*")
@@ -18,5 +17,9 @@ public class StudentController {
     @PostMapping("/student")
     public Student test(@RequestBody Student student){
         return studentRepository.save(student);
+    }
+    @GetMapping("/getStudents")
+    public List<Student> get(){
+        return studentRepository.findAll();
     }
 }

@@ -1,7 +1,7 @@
 <div class="card-deck m-2" *ngIf="this.clubs && this.clubs.length > 0">
   <div class="card" *ngFor="let c of this.clubs">
     <div style="height:200px;width:100%;text-align: center;margin: auto;">
-      <img class="card-img-top" style="width: 100%;height: 100%;" [src]="this.app.path+'icon/'+c['id']" alt="Card image cap">
+      <img class="card-img-top" style="width: 100%;height: 100%;" [src]="this.app.service.path+'image/'+c['id']" alt="Card image cap">
     </div>
     <div class="card-body">
       <h5 class="card-title">{{c.name}}</h5>
@@ -37,10 +37,10 @@
         <h5>{{a.student.firstName+' '+a.student.lastName}}</h5>
         <ul>
           <li><i class="badge badge-primary">{{a.role}}</i></li>
-          <li>{{a.student.branch.name.split('-')[0]+' '+(a.student.branch.name.split('-').length>2?a.student.branch.name.split('-')[1]:'')}}</li>
-          <li>Département : {{a.student.branch.department.name}}</li>
-          <li>{{a.student.branch.department.establishment.name}}</li>
-          <li>{{a.student.branch.department.establishment.university.name}}</li>
+          <li *ngIf="a.student.branch">{{a.student.branch.name.split('-')[0]+' '+(a.student.branch.name.split('-').length>2?a.student.branch.name.split('-')[1]:'')}}</li>
+          <li *ngIf="a.student.branch">Département : {{a.student.branch.department.name}}</li>
+          <li *ngIf="a.student.branch">{{a.student.branch.department.establishment.name}}</li>
+          <li *ngIf="a.student.branch">{{a.student.branch.department.establishment.university.name}}</li>
         </ul>
       </li>
     </ul>

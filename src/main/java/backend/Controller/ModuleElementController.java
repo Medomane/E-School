@@ -17,6 +17,9 @@ public class ModuleElementController {
     }
     @PostMapping("/moduleElement")
     public ModuleElement save(@RequestBody ModuleElement moduleElement){
-        return moduleElementRepository.save(moduleElement);
+        ModuleElement me = moduleElementRepository.findById(moduleElement.getId()).get();
+        me.setDuration(moduleElement.getDuration());
+        me.setPercent(moduleElement.getPercent());
+        return moduleElementRepository.save(me);
     }
 }
